@@ -6,6 +6,18 @@ from pathlib import Path
 from shazamio import Serialize, Shazam
 
 
+async def recognize(file):
+    shazam = Shazam()
+    out = await shazam.recognize_song(file)
+
+    try:
+        serialized = Serialize.track(data=out["track"])
+    except KeyError:
+        serialized = None
+
+    return out, serialized
+
+
 async def main():
     for song in os.listdir("."):
         out, serialized = await recognize(song)
@@ -37,18 +49,6 @@ async def main():
                 raise
 
 
-
-async def recognize(file):
-    shazam = Shazam()
-    out = await shazam.recognize_song(file)
-
-    try:
-        serialized = Serialize.track(data=out["track"])
-    except KeyError:
-        serialized = None
-
-    return out, serialized
-
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
