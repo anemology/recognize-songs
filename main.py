@@ -8,7 +8,7 @@ from shazamio import Serialize, Shazam
 
 async def main():
     for song in os.listdir("."):
-        out, serialized = await recongnize(song)
+        out, serialized = await recognize(song)
 
         index = Path(song).stem.replace("CD Track ", "")
         ext = Path(song).suffix
@@ -38,7 +38,7 @@ async def main():
 
 
 
-async def recongnize(file):
+async def recognize(file):
     shazam = Shazam()
     out = await shazam.recognize_song(file)
 
